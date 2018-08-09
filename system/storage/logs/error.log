@@ -1,0 +1,6 @@
+2018-07-11 16:22:47 - PHP Warning:  mysqli::mysqli(): (HY000/1045): Access denied for user 'admin'@'91.206.201.7' (using password: YES) in /home/a50watt/50watt.com.ua/www/system/library/db/mysqli.php on line 7
+2018-07-11 16:22:47 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /home/a50watt/50watt.com.ua/www/system/library/db/mysqli.php on line 10
+2018-07-11 16:22:47 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /home/a50watt/50watt.com.ua/www/system/library/db/mysqli.php on line 10
+2018-07-11 16:22:47 - PHP Notice:  Undefined variable: mysql in /home/a50watt/50watt.com.ua/www/install/controller/install/step_3.php on line 276
+2018-07-11 16:22:47 - PHP Notice:  Trying to get property of non-object in /home/a50watt/50watt.com.ua/www/install/controller/install/step_3.php on line 276
+2018-07-12 19:14:58 - PHP Warning:  unlink(/home/a50watt/50watt.com.ua/www/system/storage/cache/cache.admin.language.1531422720): No such file or directory in /home/a50watt/50watt.com.ua/www/system/library/cache/file.php on line 17
