@@ -357,9 +357,13 @@ class ModelCatalogProduct extends Model {
 
 	public function getProducts($data = array()) {
 		$sql = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
-		//$sql = "SELECT * FROM oc_product p LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = 2 GROUP BY p.product_id";
+
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND pd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+		}
+		
+		if (!empty($data['filter_manufacturer'])) {
+			$sql .= " AND p.manufacturer_id = (SELECT man.manufacturer_id FROM `" . DB_PREFIX . "manufacturer` man WHERE name LIKE '" . $this->db->escape($data['filter_manufacturer']) . "')";
 		}
 
 		if (!empty($data['filter_model'])) {
@@ -386,7 +390,8 @@ class ModelCatalogProduct extends Model {
 			'p.price',
 			'p.quantity',
 			'p.status',
-			'p.sort_order'
+			'p.sort_order',
+			'm.manufacturer'
 		);
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
@@ -412,9 +417,8 @@ class ModelCatalogProduct extends Model {
 
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
-
+		
 		$query = $this->db->query($sql);
-
 		return $query->rows;
 	}
 
@@ -632,12 +636,18 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function getTotalProducts($data = array()) {
-		$sql = "SELECT COUNT(DISTINCT p.product_id) AS total FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)";
+		$sql = "SELECT COUNT(DISTINCT p.product_id) AS total FROM " . DB_PREFIX . "product p "
+		. "LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)"
+		. "LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id) ";
 
 		$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND pd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+		}
+		
+		if (!empty($data['filter_manufacturer'])) {
+			$sql .= " AND m.name LIKE '" . $this->db->escape($data['filter_manufacturer']) . "%'";
 		}
 
 		if (!empty($data['filter_model'])) {
